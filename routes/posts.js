@@ -47,7 +47,7 @@ Router.post("/", (req, res) => {
     async (err, user) => {
       if (err || !user) {
         res.status(402).json({ err: true, message: "Not authentified" });
-      } else if (user.admin) {
+      } else if (user[0].admin) {
         try {
           const post = new Post({
             title: req.body.title,
@@ -78,7 +78,7 @@ Router.put("/:id", (req, res) => {
     async (err, user) => {
       if (err || !user) {
         res.status(402).json({ err: true, message: "Not authentified" });
-      } else if (user.admin) {
+      } else if (user[0].admin) {
         try {
           const post = await Post.findByIdAndUpdate(req.params.id, {
             $set: { text: req.body.text },
@@ -111,7 +111,7 @@ Router.delete(":/id", (req, res) => {
     async (err, user) => {
       if (err || !user) {
         res.status(402).json({ err: true, message: "Not authentified" });
-      } else if (user.admin) {
+      } else if (user[0].admin) {
         try {
           const post = await Post.findByIdAndDelete(req.params.id);
           if (!post) {
