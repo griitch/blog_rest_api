@@ -40,15 +40,15 @@ Router.get("/:id", async (req, res) => {
 @access : private
 */
 
-Router.post("/", async (req, res) => {
+Router.post("/", (req, res) => {
   req._passport.instance.authenticate(
     "jwt",
     { session: false },
     async (err, user) => {
       if (err || !user) {
         res.status(402).json({ err: true, message: "Not authentified" });
-        
-      } else try {
+      } else if (user.admin) {
+        try {
           const post = new Post({
             title: req.body.title,
             text: req.body.text,
@@ -59,6 +59,9 @@ Router.post("/", async (req, res) => {
         } catch (err) {
           res.json({ err: true, message: "error somewhere" });
         }
+      } else {
+        res.json({ err: true, message: "not admin" });
+      }
     }
   )(req, res);
 });
@@ -68,25 +71,31 @@ Router.post("/", async (req, res) => {
 @desc : update a post
 @access : private
 */
-Router.put("/:id", async (req, res) => {
-  try {
-    const post = await Post.findByIdAndUpdate(req.params.id, {
-      $set: { text: req.body.text },
-    });
-    if (!post) {
-      res.json({
-        err: true,
-        message: "post not found",
-      });
-    } else {
-      res.json({ message: "updated successfully" });
+Router.put("/:id", (req, res) => {
+  req._passport.instance.authenticate(
+    "jwt",
+    { session: false },
+    async (err, user) => {
+      if (err || !user) {
+        res.status(402).json({ err: true, message: "Not authentified" });
+      } else if (user.admin) {
+        try {
+          const post = await Post.findByIdAndUpdate(req.params.id, {
+            $set: { text: req.body.text },
+          });
+          if (!post) {
+            res.json({ err: true, message: "post not found" });
+          } else {
+            res.json({ message: "updated successfully" });
+          }
+        } catch (err) {
+          res.json({ err: true, message: "error somewhere" });
+        }
+      } else {
+        res.json({ err: true, message: "not admin" });
+      }
     }
-  } catch (err) {
-    res.json({
-      err: true,
-      message: "bad request",
-    });
-  }
+  )(req, res);
 });
 
 /*
@@ -94,23 +103,30 @@ Router.put("/:id", async (req, res) => {
 @desc : delete a post
 @access : private
 */
-Router.delete("/:id", async (req, res) => {
-  try {
-    const post = await Post.findByIdAndDelete(req.params.id);
-    if (!post) {
-      res.json({
-        err: true,
-        message: "post not found",
-      });
-    } else {
-      res.json({ message: "deleted successfully" });
+
+Router.delete(":/id", (req, res) => {
+  req._passport.instance.authenticate(
+    "jwt",
+    { session: false },
+    async (err, user) => {
+      if (err || !user) {
+        res.status(402).json({ err: true, message: "Not authentified" });
+      } else if (user.admin) {
+        try {
+          const post = await Post.findByIdAndDelete(req.params.id);
+          if (!post) {
+            res.json({ err: true, message: "post not found" });
+          } else {
+            res.json({ message: "deleted successfully" });
+          }
+        } catch (err) {
+          res.json({ err: true, message: "bad request" });
+        }
+      } else {
+        res.json({ err: true, message: "not admin" });
+      }
     }
-  } catch (err) {
-    res.json({
-      err: true,
-      message: "bad request",
-    });
-  }
+  )(req, res);
 });
 
 module.exports = Router;
