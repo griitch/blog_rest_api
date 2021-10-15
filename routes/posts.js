@@ -20,7 +20,7 @@ Router.get("/", async (req, res) => {
 Router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post) res.json(post);
+    if (post) res.json({ ...post._doc, commentsUri: post.commentsUri });
     else
       res.json({
         err: true,
