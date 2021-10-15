@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 @access : public
 */
 Router.post("/", async (req, res) => {
-  const foo = await User.find({ username: req.body.username });
+  const foo = await User.findOne({ username: req.body.username });
   if (foo) {
     res.json({
       err: true,
