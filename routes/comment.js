@@ -19,10 +19,28 @@ Router.get("/:postId", async (req, res) => {
 @desc : put a comments of the specified post
 @access : private
 */
-Router.post(":postId", async (req, res) => {
-  res.json({
-    foo: "route to post a new comment, gotta first check if user is auth and then post the comm",
-  });
+Router.post("/:postId", (req, res) => {
+  req._passport.instance.authenticate(
+    "jwt",
+    { session: false },
+    async (err, user) => {
+      if (err || !user) {
+        res.status(402).json({ err: true, message: "Not authentified" });
+      } else {
+        try {
+          const newComment = new Comment({
+            userId: user.id,
+            postId: req.params.postId,
+            comment: req.body.comment,
+          });
+          await newComment.save();
+          res.json({ message: "comment added" });
+        } catch (e) {
+          res.json({ error: true, message: "error somwhere" });
+        }
+      }
+    }
+  )(req, res);
 });
 
 module.exports = Router;
