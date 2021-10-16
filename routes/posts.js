@@ -104,7 +104,7 @@ Router.put("/:id", (req, res) => {
 @access : private
 */
 
-Router.delete(":/id", (req, res) => {
+Router.delete("/:id", (req, res) => {
   req._passport.instance.authenticate(
     "jwt",
     { session: false },

@@ -15,8 +15,8 @@ Router.post("/", async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username: username });
-
-    if (!user) res.json({ error: true, message: "No such userame exists" });
+    if (!user)
+      return res.json({ error: true, message: "No such userame exists" });
 
     const isMatching = await bcrypt.compare(password, user.passwordHash);
     if (isMatching) {

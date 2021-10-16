@@ -9,7 +9,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.secret;
 
 module.exports = new jwtStrategy(opts, (jwtPayload, done) => {
-  User.findOne({ username: jwtPayload.username }, function (err, user) {
+  User.findOne({ username: [jwtPayload] }, function (err, user) {
     if (err) {
       return done(err, false);
     }
