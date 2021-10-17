@@ -21,6 +21,7 @@ mongoose
   .catch(console.log);
 
 const app = express();
+app.use(require("cors")());
 app.use(express.json());
 
 app.use(passport.initialize());
