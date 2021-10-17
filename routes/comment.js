@@ -10,7 +10,7 @@ const Comment = require("../models/Comment");
 Router.get("/:postId", async (req, res) => {
   const comments = await Comment.find({
     $eq: { postId: req.params.postId },
-  });
+  }).populate("userId", "username");
   res.json(comments);
 });
 
