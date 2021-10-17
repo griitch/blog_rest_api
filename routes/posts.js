@@ -53,6 +53,7 @@ Router.post("/", (req, res) => {
             title: req.body.title,
             text: req.body.text,
             keywords: [...req.body.keywords],
+            description: req.body.description,
           });
           await post.save();
           res.json({ message: "added successfully" });
@@ -80,8 +81,20 @@ Router.put("/:id", (req, res) => {
         res.status(402).json({ err: true, message: "Not authentified" });
       } else if (user.admin) {
         try {
+          const options = {};
+          if (req.body.text) {
+            options.text = req.body.text;
+          }
+          if (req.body.description) {
+            options.description = req.body.description;
+          }
+
+          if (req.body.title) {
+            options.title = req.body.title;
+          }
+
           const post = await Post.findByIdAndUpdate(req.params.id, {
-            $set: { text: req.body.text },
+            $set: options,
           });
           if (!post) {
             res.json({ err: true, message: "post not found" });
