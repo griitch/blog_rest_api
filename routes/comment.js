@@ -8,9 +8,10 @@ const Comment = require("../models/Comment");
 @access : public
 */
 Router.get("/:postId", async (req, res) => {
-  const comments = await Comment.find({
-    $eq: { postId: req.params.postId },
-  }).populate("userId", "username");
+  const comments = await Comment.find({ postId: req.params.postId }).populate(
+    "userId",
+    "username"
+  );
   res.json(comments);
 });
 

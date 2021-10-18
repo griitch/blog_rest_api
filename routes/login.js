@@ -21,7 +21,12 @@ Router.post("/", async (req, res) => {
     const isMatching = await bcrypt.compare(password, user.passwordHash);
     if (isMatching) {
       const token = jwt.sign(username, secret, {});
-      res.json({ token, message: "authentication passed" });
+      res.json({
+        token,
+        message: "authentication passed",
+        username,
+        admin: user.admin,
+      });
     } else {
       res.json({ error: true, message: "wrong password" });
     }
