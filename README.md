@@ -61,13 +61,13 @@ Request body format : a json document with the fields : username, password
 
 ## /login
 
-### POST /users
+### POST /login
 
 Login and return the jwt if authentified  
 Public access  
 Request body format : a json document with the fields : username, password
 
-### POST /users/auth
+### POST /login/auth
 
 Verify jwt  
 Public access  
