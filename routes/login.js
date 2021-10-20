@@ -35,4 +35,23 @@ Router.post("/", async (req, res) => {
   }
 });
 
+/*
+@route: POST /login/auth
+@desc: verify if the jwt is valid
+@access : public
+*/
+Router.post("/auth", (req, res) => {
+  req._passport.instance.authenticate(
+    "jwt",
+    { session: false },
+    async (err, user) => {
+      if (err || !user) {
+        res.json({ error: true, message: "invalid credentials" });
+      } else {
+        res.json({ user: user.username, message: "valid jwt" });
+      }
+    }
+  )(req, res);
+});
+
 module.exports = Router;

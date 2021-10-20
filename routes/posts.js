@@ -93,6 +93,10 @@ Router.put("/:id", (req, res) => {
             options.title = req.body.title;
           }
 
+          if (req.body.keywords) {
+            options.keywords = req.body.keywords;
+          }
+
           const post = await Post.findByIdAndUpdate(req.params.id, {
             $set: options,
           });
