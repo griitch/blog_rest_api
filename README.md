@@ -1,5 +1,10 @@
 # Express blog REST Api
 
+## Related links
+[Content management system front end repo](https://github.com/griitch/react-blog-cms)
+[Blog front end repo](https://github.com/griitch/blog-react-frontend/)
+
+
 ## Api endpoints
 
 ## /posts
